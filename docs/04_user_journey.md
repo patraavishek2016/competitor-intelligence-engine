@@ -1,92 +1,81 @@
 # User Journey — Competitor Intelligence Engine
 
-## Demo Mode Journey
-
-This document describes the end-to-end user journey for the **Demo Mode** of the Competitor Intelligence Engine, available as of Milestone 2.
+This document describes the end-to-end user journeys for both **Demo Mode** and **Live Research Mode** of the Competitor Intelligence Engine.
 
 ---
 
+## Demo Mode Journey
+
+No-cost evaluation of the dashboard structure using high-fidelity fictional static data.
+
 ### Step 1: Open App
-
-The user launches the application locally:
-
+The user launches the application:
 ```bash
 streamlit run app.py
 ```
+The browser opens to the home screen showing:
+* Product title and strategic description.
+* **Safety Notice** banner warning that outputs are hypotheses requiring validation.
+* Default selectbox set to **Demo Mode**.
 
-The browser opens to the Competitor Intelligence Engine home screen showing:
-- The product title and positioning statement.
-- A **Safety Notice** explaining outputs are hypotheses requiring human validation.
-- A **Demo Mode badge** confirming no external API calls are made.
-
----
-
-### Step 2: Review Demo Mode Disclaimer
-
-Before interacting, the user reads and acknowledges two visible banners:
-
-| Banner | Content |
-|--------|---------|
-| ⚠️ Safety Notice | "Generated outputs are product hypotheses and require human validation before strategic or implementation decisions." |
-| 🔵 Demo Mode | "Fictional static demo data. No external API calls are made." |
-
-This sets clear expectations: the results are illustrative and not derived from live research.
-
----
+### Step 2: Review Demo Mode Banners
+Before interacting, the user reads the default banners:
+* ⚠️ **Safety Notice**: "Generated outputs are product hypotheses and require human validation..."
+* 🔵 **Demo Mode**: "Fictional static demo data. No external API calls are made."
 
 ### Step 3: Run Demo Analysis
-
 The user clicks the **▶ Run Demo Analysis** button.
-
-- The application loads the `get_demo_result()` function from `demo_data.py`.
-- No network calls, API keys, or environment variables are used.
-- Results are stored in `st.session_state` so they persist across Streamlit reruns without re-triggering the load.
-- A success confirmation message is shown immediately.
-
----
+* The application immediately fetches `get_demo_result()` from `demo_data.py`.
+* No network requests, API keys, or environment variables are accessed.
+* A success confirmation message appears.
 
 ### Step 4: Review Outputs
+The user navigates the five results tabs:
+* **📋 Executive Summary**: Synthesized narrative of the fictional NimbusFlow competitor.
+* **🔲 SWOT Analysis**: Grid with source citations and confidence values.
+* **🎯 Opportunity Gaps**: Prioritized market gaps with BDD-like rationale.
+* **📦 Product Backlog**: One Epic and three User Stories with acceptance criteria.
+* **📚 Evidence Sources**: All sources are clearly labeled with a **Fictional** badge.
 
-Results are presented across **five labelled tabs**:
-
-| Tab | Content |
-|-----|---------|
-| 📋 Executive Summary | High-level narrative summary of the competitor analysis |
-| 🔲 SWOT Analysis | Strengths, Weaknesses, Opportunities, Threats — each with source IDs and confidence levels |
-| 🎯 Opportunity Gaps | Prioritised product gaps with rationale and source traceability |
-| 📦 Product Backlog | One Epic, three User Stories, and BDD-format acceptance criteria |
-| 📚 Evidence Sources | All sources clearly labelled as fictional; no sources presented as verified |
-
-The user may navigate freely between tabs. Results remain visible until the app is restarted.
+### Step 5: Export Report
+The user downloads a compiled markdown file titled `competitor-intelligence-demo-brief.md` by clicking the download button in the Executive Summary tab.
 
 ---
 
-### Step 5: Download Markdown Brief
+## Live Research Mode Journey
 
-On the **Executive Summary** tab, the user clicks:
+Controlled public research using active server-side APIs, protected by an access gate.
 
-> ⬇ **Download Markdown Brief**
+### Step 1: Switch Mode
+The user changes the operation mode selectbox from **Demo Mode** to **Live Research Mode**.
+* The blue Demo badge transitions to a red **Live Research Mode** badge.
+* The system renders a warning regarding paid API usage and the necessity to input only public competitor URLs.
 
-This downloads `competitor-intelligence-demo-brief.md` — a complete, formatted summary of the full analysis including:
-- Disclaimer
-- Competitor name and URL
-- Executive summary
-- SWOT analysis
-- Opportunity gaps
-- Epic and User Stories with acceptance criteria
-- Evidence sources
+### Step 2: Read Warnings and Secure Gate Notes
+The user reviews:
+* ⚠️ **Paid API Warning**: "This mode performs paid external API requests using server-side credentials. Use only public competitor URLs..."
+* 💡 **Security Disclaimer**: "Prototype limitation: access-code protection is a basic usage gate. It is not a substitute for enterprise authentication..."
 
-The brief is generated entirely by `build_markdown_brief()` from `utils.py` with no external calls.
+### Step 3: Enter Target Product Context, Target URL, and Access Code
+The user enters:
+* **Public Competitor URL**: e.g., `https://competitor.com`
+* **Target Product / Strategy Context**: Describes the target product users and differentiation goal (e.g., *"A hypothetical B2B collaboration workspace for distributed product teams that differentiates through asynchronous decision capture, auditability, and lightweight governance."*). This is required and cannot be blank.
+* **Access Code**: The secret deployment gate code (masked with type `password`).
 
----
+### Step 4: Submit Live Research
+The user clicks **Run Live Research**.
+1. **Server Configuration Check**: The server loads the `.env` settings. If API keys or the access code are missing, the UI displays: *"Live Research Mode is not configured in this deployment."*
+2. **Authorization Check**: The server uses secure comparison (`hmac.compare_digest`). If the access code is invalid, the UI displays: *"Access code was not accepted."*
+3. **Graph Execution**: If validation and authorization succeed, the server triggers the compiled LangGraph workflow under a generic spinner: *"Running the controlled research, analysis, and backlog workflow..."*
 
-### Future Journey (Milestone 3 Preview)
+### Step 5: Review Live Outputs
+If successful, the dashboard renders live-fetched, AI-structured data across the same tabs:
+* **Target Product Context**: The user's submitted context is rendered at the top of the results section.
+* **📋 Executive Summary**: Real competitor summary.
+* **🔲 SWOT Analysis**: Real SWOT with validated source references.
+* **🎯 Opportunity Gaps**: Real opportunity gaps.
+* **📦 Product Backlog**: Generated Epic and Stories representing a differentiated response hypothesis for the target product context (rather than a roadmap for the competitor).
+* **📚 Evidence Sources**: Real sources retrieved by the Tavily agent. Sources are **not** labeled fictional, and display a note: *"Public evidence retrieved during this live run. Validate before relying on it."*
 
-When **Live Research Mode** is released, the journey will extend to include:
-
-- Inputting a real competitor URL.
-- Triggering the Research Agent to retrieve live public sources.
-- Reviewing AI-synthesised strategic insights grounded in retrieved evidence.
-- Downloading an evidence-backed brief.
-
-> This mode will only be available after API security, source retrieval, and access-control guardrails are fully implemented.
+### Step 6: Export Report
+The user downloads the generated report as `competitor-intelligence-live-brief.md` containing the prepended Target Product Context header.

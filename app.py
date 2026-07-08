@@ -93,6 +93,15 @@ st.markdown(
         color: #1e40af;
         margin-bottom: 16px;
     }
+    .cie-live-badge {
+        background: #fff5f5;
+        border: 1px solid #feb2b2;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 0.875rem;
+        color: #9b2c2c;
+        margin-bottom: 16px;
+    }
     .cie-future-note {
         background: #f0fdf4;
         border: 1px solid #bbf7d0;
@@ -153,33 +162,117 @@ st.markdown(
     "</div>",
     unsafe_allow_html=True,
 )
-st.markdown(
-    '<div class="cie-demo-badge">'
-    "🔵 <strong>Demo Mode:</strong> Fictional static demo data. No external API calls are made."
-    "</div>",
-    unsafe_allow_html=True,
-)
 
 st.divider()
 
 # ─────────────────────────────────────────────
-# Primary action
+# Mode Selector
 # ─────────────────────────────────────────────
-col_btn, col_info = st.columns([2, 5])
-with col_btn:
-    if st.button("▶ Run Demo Analysis", type="primary", use_container_width=True):
-        with st.spinner("Loading demo analysis…"):
-            st.session_state["cie_result"] = get_demo_result()
-        st.success("Demo analysis loaded.")
+operation_mode = st.selectbox(
+    "Operation Mode",
+    ["Demo Mode", "Live Research Mode"],
+    index=0,
+    help="Select between no-cost static demo data and protected live competitor research."
+)
 
-with col_info:
-    st.caption(
-        "Loads the NimbusFlow fictional competitor analysis from static demo data. "
-        "No network requests are made."
+# ─────────────────────────────────────────────
+# Mode Specific Action Blocks
+# ─────────────────────────────────────────────
+if operation_mode == "Demo Mode":
+    st.markdown(
+        '<div class="cie-demo-badge">'
+        "🔵 <strong>Demo Mode:</strong> Fictional static demo data. No external API calls are made."
+        "</div>",
+        unsafe_allow_html=True,
     )
 
+    col_btn, col_info = st.columns([2, 5])
+    with col_btn:
+        if st.button("▶ Run Demo Analysis", type="primary", use_container_width=True):
+            with st.spinner("Loading demo analysis…"):
+                st.session_state["cie_result"] = get_demo_result()
+            st.success("Demo analysis loaded.")
+
+    with col_info:
+        st.caption(
+            "Loads the NimbusFlow fictional competitor analysis from static demo data. "
+            "No network requests are made."
+        )
+
+else:
+    st.markdown(
+        '<div class="cie-live-badge">'
+        "🔴 <strong>Live Research Mode:</strong> Protected access gate. Invokes LangGraph live workflow."
+        "</div>",
+        unsafe_allow_html=True,
+    )
+
+    with st.form("live_research_form"):
+        st.markdown("### Protected Live Research Mode")
+        st.warning(
+            "⚠️ This mode performs paid external API requests using server-side credentials. "
+            "Use only public competitor URLs and validate all generated outputs."
+        )
+
+        live_url = st.text_input("Public Competitor URL", placeholder="https://example.com")
+
+        target_product_context = st.text_area(
+            "Target Product / Strategy Context",
+            value="A hypothetical B2B collaboration workspace for distributed product teams that differentiates through asynchronous decision capture, auditability, and lightweight governance.",
+            help="Describe the hypothetical target product, target users, and differentiation goal. Do not enter employer, customer, personal, confidential, or restricted information.",
+            max_chars=1000
+        )
+
+        access_code = st.text_input("Access Code", type="password", placeholder="Enter authorization code")
+
+        run_btn = st.form_submit_button("Run Live Research", type="primary")
+
+        st.info(
+            "💡 **Prototype limitation:** access-code protection is a basic usage gate. It is not a "
+            "substitute for enterprise authentication, authorization, or server-side rate limiting."
+        )
+
+    if run_btn:
+        from live_mode import (
+            load_live_mode_settings,
+            is_live_mode_configured,
+            is_live_request_authorized,
+            build_live_workflow_input,
+            LiveResearchResult
+        )
+        from agent_logic import create_competitor_workflow
+
+        # 0. Validate Target Product Context is not empty
+        if not target_product_context.strip():
+            st.error("Target Product / Strategy Context is required and cannot be blank.")
+        else:
+            # 1. Load settings
+            settings = load_live_mode_settings()
+
+            # 2. Check configuration first
+            if not is_live_mode_configured(settings):
+                st.error("Live Research Mode is not configured in this deployment.")
+            # 3. Check access code next
+            elif not is_live_request_authorized(access_code, settings.live_research_access_code):
+                st.error("Access code was not accepted.")
+            # 4. Run workflow
+            else:
+                with st.spinner("Running the controlled research, analysis, and backlog workflow…"):
+                    try:
+                        workflow = create_competitor_workflow()
+                        inputs = build_live_workflow_input(live_url, settings, target_product_context)
+                        final_state = workflow.invoke(inputs)
+
+                        if final_state.get("error"):
+                            st.error(final_state["error"])
+                        else:
+                            st.session_state["cie_result"] = LiveResearchResult(final_state)
+                            st.success("Live research completed successfully.")
+                    except Exception:
+                        st.error("Public research could not be completed. Please try another public product URL.")
+
 # ─────────────────────────────────────────────
-# Results — only if loaded
+# Results rendering
 # ─────────────────────────────────────────────
 if "cie_result" in st.session_state:
     result = st.session_state["cie_result"]
@@ -187,6 +280,11 @@ if "cie_result" in st.session_state:
     st.divider()
     st.subheader(f"Analysis: {result.competitor_name}")
     st.caption(f"Competitor URL: {result.competitor_url} · Mode: `{result.mode}`")
+
+    # Render target product context for live runs
+    if result.mode == "live" and hasattr(result, "target_product_context") and result.target_product_context:
+        st.markdown("**Target Product Context**")
+        st.info(result.target_product_context)
 
     tab_summary, tab_swot, tab_gaps, tab_backlog, tab_sources = st.tabs([
         "📋 Executive Summary",
@@ -203,11 +301,16 @@ if "cie_result" in st.session_state:
 
         st.markdown("---")
         st.markdown("#### Export Report")
+
         md_content = build_markdown_brief(result)
+        # Prepend Target Product Context in Markdown brief for live results
+        if result.mode == "live" and hasattr(result, "target_product_context") and result.target_product_context:
+            md_content = f"## Target Product Context\n{result.target_product_context}\n\n---\n\n" + md_content
+
         st.download_button(
             label="⬇ Download Markdown Brief",
             data=md_content.encode("utf-8"),
-            file_name="competitor-intelligence-demo-brief.md",
+            file_name=f"competitor-intelligence-{result.mode}-brief.md",
             mime="text/markdown",
             help="Downloads the full analysis as a Markdown document.",
         )
@@ -287,11 +390,18 @@ if "cie_result" in st.session_state:
     # ── Tab 5: Evidence Sources ───────────────────
     with tab_sources:
         st.markdown("#### Evidence Sources")
-        st.info(
-            "⚠️ These sources are **entirely fictional** and are provided for demonstration "
-            "purposes only. They do not represent verified live research.",
-            icon="ℹ️",
-        )
+        if result.mode == "demo":
+            st.info(
+                "⚠️ These sources are **entirely fictional** and are provided for demonstration "
+                "purposes only. They do not represent verified live research.",
+                icon="ℹ️",
+            )
+        else:
+            st.info(
+                "ℹ️ Public evidence retrieved during this live run. Validate before relying on it.",
+                icon="ℹ️",
+            )
+
         for src in result.sources:
             label = '<span class="fiction-label">Fictional</span>' if src.is_fictional else ""
             st.markdown(
@@ -304,15 +414,16 @@ if "cie_result" in st.session_state:
                 unsafe_allow_html=True,
             )
 
-    # ── Future capability notice ──────────────────
-    st.markdown(
-        '<div class="cie-future-note">'
-        "🔭 <strong>Coming in Milestone 3:</strong> Live Research Mode will be introduced after "
-        "API security, source retrieval, and access-control guardrails are implemented. "
-        "It will include a live Research Agent, Strategic Analyst, and Backlog Writer."
-        "</div>",
-        unsafe_allow_html=True,
-    )
+    # ── Future capability notice (only for demo results) ──
+    if result.mode == "demo":
+        st.markdown(
+            '<div class="cie-future-note">'
+            "🔭 <strong>Coming in Milestone 3:</strong> Live Research Mode will be introduced after "
+            "API security, source retrieval, and access-control guardrails are implemented. "
+            "It will include a live Research Agent, Strategic Analyst, and Backlog Writer."
+            "</div>",
+            unsafe_allow_html=True,
+        )
 
 else:
     st.markdown(
@@ -320,7 +431,7 @@ else:
         <div style="text-align:center; padding:48px 0; color:#94a3b8;">
             <div style="font-size:3rem;">🧠</div>
             <div style="font-size:1.1rem; margin-top:12px;">
-                Click <strong>Run Demo Analysis</strong> above to load the NimbusFlow competitor analysis.
+                Choose a mode and run the analysis above to view results.
             </div>
         </div>
         """,
@@ -332,7 +443,8 @@ else:
 # ─────────────────────────────────────────────
 st.markdown(
     '<div class="cie-footer">'
-    "Portfolio prototype by Avishek Patra · Demo Mode only · Built with Streamlit and Pydantic."
+    "Portfolio prototype by Avishek Patra · Demo Mode and protected Live Research Mode · "
+    "Built with Streamlit, LangGraph, Tavily, OpenAI, and Pydantic."
     "</div>",
     unsafe_allow_html=True,
 )
