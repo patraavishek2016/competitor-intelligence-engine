@@ -1,3 +1,14 @@
+---
+title: Competitor Intelligence Engine
+emoji: ??
+colorFrom: indigo
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+license: mit
+---
+
 # Competitor Intelligence Engine
 
 “An evidence-grounded multi-agent AI prototype that transforms public competitor research into strategic product opportunities and implementation-ready backlog recommendations.”
