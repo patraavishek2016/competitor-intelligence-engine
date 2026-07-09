@@ -93,3 +93,30 @@ Below is the scorecard for tracking quality across manual live runs.
 ## 10. Release Readiness Decision
 * **Status**: ⚠️ **Staged with Warnings**
 * **Rationale**: The pilot run exposed a critical backlog framing issue which was successfully addressed by adding the Target Product Context parameter and prompt filters. The staging release will remain staged until manual refined runs confirm a mean scorecard grade of >= 4.0/5.
+
+---
+
+## 11. Recruiter-Facing Learnings
+
+This section highlights key architectural decisions and product trade-offs made during development, which serve as useful discussion points for engineering and product design interviews.
+
+### Why First-Party Evidence Relevance Matters
+* **Decision**: We strictly gate the evidence retrieval layer to the canonical competitor domain and its subdomains (e.g., `miro.com`, `help.miro.com`), completely filtering out third-party reviews, blogs, or forums (such as G2, Reddit, or Capterra).
+* **Rationale**: Third-party review sites are heavily prone to user opinion bias, outdated pricing information, and marketing noise. Restricting strategic SWOT and backlog generation to first-party competitor-published documents preserves high data integrity, ensures grounded insights, and avoids hallucinating competitive positioning.
+
+### Why Target Product Context Was Introduced
+* **Decision**: We added a required input field in Live Research Mode for the user to provide their own **Target Product / Strategy Context** (e.g., "We are building a lightweight visual flowcharting tool targeting non-technical business teams").
+* **Rationale**: During early pilot testing, the Strategic Analyst and Backlog Writer agents defaulted to generating backlog recommendations and feature roadmaps for the *competitor itself* (e.g., suggesting Miro should add a feature). Introducing target context ensures the backlog is formulated as a *differentiated competitive response hypothesis* for the user's product, solving a critical product-alignment gap.
+
+### Why Demo Mode Matters
+* **Decision**: We designed a static, zero-network-cost "Demo Mode" containing pre-baked datasets that does not perform external LLM or Tavily API queries.
+* **Rationale**: This lets recruiters, stakeholders, and visitors try the engine immediately without requiring API keys, encountering rate limits, or incurring OpenAI billable costs. It separates static frontend demonstration from active backend computing.
+
+### Why Docker Deployment Matters
+* **Decision**: The entire application is containerized via Docker and deployed directly to Hugging Face Spaces.
+* **Rationale**: Docker guarantees environment consistency across macOS, Windows, and cloud environments. It simplifies dependency management, packages the Streamlit web app with its environment variables securely, and ensures instant launch capability for any portfolio reviewer.
+
+### Trade-offs and Future Improvements
+* **Trade-off**: The first-party evidence gate improves credibility but restricts recall.
+* **Recall Fix**: We solved this by implementing site-scoped fallback queries sequentially with early-stopping cost controls, optimizing both coverage and budget.
+* **Future Enhancement**: Introduce human-in-the-loop editing gates at the SWOT stage, allowing product managers to refine strategic insights before stories are drafted.

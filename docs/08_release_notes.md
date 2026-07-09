@@ -2,6 +2,37 @@
 
 ---
 
+## Milestone 4A — Final Project 0 Recruiter Packaging
+
+**Release date:** 2026-07-09  
+**Status:** ✅ Complete
+
+### Overview
+Milestone 4A packages the competitor-intelligence-engine prototype for direct recruiter and portfolio review. It establishes a polished root README.md, updates metrics documents with structured recruiter-oriented learnings, and marks the successful dockerized cloud hosting on Hugging Face Spaces. No runtime code, secrets, or tests were changed.
+
+### Delivered Packaging
+* **Recruiter-Facing Readme**: Restructured the root `README.md` to highlight live/demo links, target users, problem context, LangGraph architecture, AI safety features, and talking points.
+* **Mermaid Workflow Diagram**: Added a detailed system sequence and flow diagram to illustrate multi-agent state coordination.
+* **Docker & HF Spaces Documentation**: Added comprehensive guides for local and containerized hosting.
+* **Recruiter-Facing Learnings**: Added architectural summaries in `docs/07_metrics_and_learnings.md` addressing key design choices (e.g., target context, first-party gates, and demo modes).
+
+---
+
+## Milestone 4 — Evaluation & Deployment
+
+**Release date:** 2026-07-07  
+**Status:** ✅ Complete
+
+### Overview
+Milestone 4 containerized the Streamlit application for production-ready portability and deployed the engine to a Hugging Face Spaces Docker runtime.
+
+### Delivered Capabilities
+* **Docker Containerization**: Designed a production-optimized `Dockerfile` exposing standard Streamlit ports.
+* **Hugging Face Cloud Hosting**: Successfully deployed the dockerized container to Hugging Face Spaces at `https://huggingface.co/spaces/patraavishek2016/competitor-intelligence-engine`.
+* **Environment Configuration**: Set up secure environment secrets mapping to prevent keys/access codes leaking to public clients.
+
+---
+
 ## Milestone 3 — Live Orchestration & Fail-safe Research
 
 **Release date:** 2026-06-30
@@ -41,14 +72,6 @@ Milestone 3 transitions the Competitor Intelligence Engine from a static dashboa
 ### Known Limitations
 * **Prototype Access Gate**: The access code is a simple gate to prevent unauthorized execution of your endpoints and billing; it is not a substitute for enterprise-grade authentication.
 * **LLM Dependency**: Errors in OpenAI schema validation will result in the workflow terminating immediately with a generic error block.
-
----
-
-## Milestone 4 — Evaluation & Deployment (Preview)
-The next milestone will focus on:
-* **LLM Quality Evaluation**: Measuring accuracy, hallucination rate, and citation precision.
-* **Docker Packaging**: Containerizing the application for portable deployments.
-* **Hugging Face / Cloud Deployment**: Launching the portfolio prototype to a cloud runtime environment.
 
 ---
 
