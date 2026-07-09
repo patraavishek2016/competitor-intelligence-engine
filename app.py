@@ -418,9 +418,8 @@ if "cie_result" in st.session_state:
     if result.mode == "demo":
         st.markdown(
             '<div class="cie-future-note">'
-            "🔭 <strong>Coming in Milestone 3:</strong> Live Research Mode will be introduced after "
-            "API security, source retrieval, and access-control guardrails are implemented. "
-            "It will include a live Research Agent, Strategic Analyst, and Backlog Writer."
+            "🔭 <strong>Live Research Mode is available in protected mode.</strong> "
+            "Public Demo Mode uses fictional static data and makes no external API calls."
             "</div>",
             unsafe_allow_html=True,
         )
