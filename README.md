@@ -1,6 +1,5 @@
 ---
 title: Competitor Intelligence Engine
-emoji: ??
 colorFrom: indigo
 colorTo: blue
 sdk: docker
