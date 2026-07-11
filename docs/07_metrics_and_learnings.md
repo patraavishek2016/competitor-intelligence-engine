@@ -93,3 +93,15 @@ Below is the scorecard for tracking quality across manual live runs.
 ## 10. Release Readiness Decision
 * **Status**: ⚠️ **Staged with Warnings**
 * **Rationale**: The pilot run exposed a critical backlog framing issue which was successfully addressed by adding the Target Product Context parameter and prompt filters. The staging release will remain staged until manual refined runs confirm a mean scorecard grade of >= 4.0/5.
+
+---
+
+## Product Design Learnings
+
+Through the build and refinement of this portfolio prototype, several key strategic product lessons were uncovered:
+
+* **The Problem is Bigger than Summarization**: Merely summarizing competitor feature lists is a low-value commodity activity. The real friction for a product manager is translating those summaries into actionable execution roadmaps. An effective tool must bridge the gap between telemetry retrieval and backlog generation.
+* **Evidence Traceability is a Trust Prerequisite**: PMs and engineers are inherently skeptical of LLM-generated suggestions. By building explicit `source_ids` and grounding all claims in verified first-party URLs, we turn untrusted AI output into an auditable document that users can confidently stand behind.
+* **Target Product Context is Mandatory**: In initial pilot runs without target context, the AI defaulted to proposing improvements for the competitor itself. Introducing a required target context input anchors the analysis to *our* B2B strategy, generating defensive or offensive feature response hypotheses instead of copying the competitor.
+* **Demo Mode Protects public showcases**: Making API-dependent live search tools publicly accessible invites high token costs and billing vulnerability. A fully static Demo Mode with high-fidelity, validated mock data allows public review of the architecture, UX, and schema validation gates without exposing runtime endpoints to cost exhaustion.
+* **Human-in-the-Loop is the Strategy Boundary**: While the agent workflow automates 90% of the cognitive lifting (searching, formatting, writing stories), final strategic decisions cannot be outsourced. The AI acts as a high-fidelity drafting assistant, while the Product Manager acts as the ultimate filter, validator, and editor before importing to the team's engineering backlog.

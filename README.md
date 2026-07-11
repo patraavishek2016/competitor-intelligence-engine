@@ -23,6 +23,17 @@ This repository is an **active portfolio prototype under development**. It serve
 
 ---
 
+## Product Strategy & Design Artifacts
+
+* [docs/09_product_design_approach.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/09_product_design_approach.md)
+* [docs/10_prd.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/10_prd.md)
+* [docs/07_metrics_and_learnings.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/07_metrics_and_learnings.md)
+* [docs/08_release_notes.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/08_release_notes.md)
+
+This project documents both the product thinking and the agentic system design behind the build. The goal is to show how a fragmented product-discovery workflow was translated into a source-grounded, human-reviewable, multi-agent product intelligence system.
+
+---
+
 ## Problem
 
 Product managers, strategy leads, and founders spend hours manually scanning competitor websites, press releases, and articles to extract market insights. Transitioning these insights into actionable planning artifacts (like SWOT analyses, opportunity gaps, and backlogs) is highly manual, error-prone, and disconnected from original source materials. This often leads to:
@@ -123,7 +134,11 @@ The application codebase is implemented using a modern Python-based stack:
 ├── requirements.txt          <-- Production dependencies
 ├── requirements-dev.txt      <-- Development and testing dependencies
 ├── docs/                     <-- Architectural and product research documents
-│   └── 01_project_charter.md <-- High-level vision, JTBD, success metrics, and non-goals
+│   ├── 01_project_charter.md <-- High-level vision, JTBD, success metrics, and non-goals
+│   ├── 07_metrics_and_learnings.md <-- Metric logs, hypotheses, and product learnings
+│   ├── 08_release_notes.md   <-- Release logs, feature history, and prototype roadmap
+│   ├── 09_product_design_approach.md <-- Why and how the competitor engine was designed
+│   └── 10_prd.md             <-- Complete Product Requirements Document
 └── tests/                    <-- pytest suite verifying agent steps and Pydantic validation
 ```
 

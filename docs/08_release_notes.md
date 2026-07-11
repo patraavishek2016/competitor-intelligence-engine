@@ -2,6 +2,26 @@
 
 ---
 
+## v0.1.1 — Product Design and PRD Closure
+
+**Release date:** 2026-07-11
+**Status:** ✅ Complete
+
+### Overview
+This release closes out the project requirements phase by establishing mature product management documentation. It explains the customer pain points, design choices, and how the multi-agent system maps directly to these needs.
+
+### Deliverables & Documentation Updates
+* **Added Product Design Approach**: Created `docs/09_product_design_approach.md` covering customer journeys, friction, detailed 3C analysis, personas, OKRs, and agentic rationale.
+* **Added Product Requirements Document**: Created `docs/10_prd.md` containing core system objectives, hypotheses, functional and non-functional requirements, detailed BDD user stories, and mitigations.
+* **Added README Links**: Integrated links to all product design artifacts in `README.md` and updated the folder layout graphic.
+* **Updated Product Learnings**: Appended strategic reflections in `docs/07_metrics_and_learnings.md` addressing context gating, evidence traceability, and Demo Mode constraints.
+
+### Constraints Check
+* **No runtime logic changed**: No python execution flows or orchestration nodes modified.
+* **No secrets, Docker, dependencies, tests, or deployment settings changed**.
+
+---
+
 ## Milestone 3 — Live Orchestration & Fail-safe Research
 
 **Release date:** 2026-06-30
