@@ -120,3 +120,15 @@ This section highlights key architectural decisions and product trade-offs made 
 * **Trade-off**: The first-party evidence gate improves credibility but restricts recall.
 * **Recall Fix**: We solved this by implementing site-scoped fallback queries sequentially with early-stopping cost controls, optimizing both coverage and budget.
 * **Future Enhancement**: Introduce human-in-the-loop editing gates at the SWOT stage, allowing product managers to refine strategic insights before stories are drafted.
+
+---
+
+## Product Design Learnings
+
+Through the build and refinement of this portfolio prototype, several key strategic product lessons were uncovered:
+
+* **The Problem is Bigger than Summarization**: Merely summarizing competitor feature lists is a low-value commodity activity. The real friction for a product manager is translating those summaries into actionable execution roadmaps. An effective tool must bridge the gap between telemetry retrieval and backlog generation.
+* **Evidence Traceability is a Trust Prerequisite**: PMs and engineers are inherently skeptical of LLM-generated suggestions. By building explicit `source_ids` and grounding all claims in verified first-party URLs, we turn untrusted AI output into an auditable document that users can confidently stand behind.
+* **Target Product Context is Mandatory**: In initial pilot runs without target context, the AI defaulted to proposing improvements for the competitor itself. Introducing a required target context input anchors the analysis to *our* B2B strategy, generating defensive or offensive feature response hypotheses instead of copying the competitor.
+* **Demo Mode Protects public showcases**: Making API-dependent live search tools publicly accessible invites high token costs and billing vulnerability. A fully static Demo Mode with high-fidelity, validated mock data allows public review of the architecture, UX, and schema validation gates without exposing runtime endpoints to cost exhaustion.
+* **Human-in-the-Loop is the Strategy Boundary**: While the agent workflow automates 90% of the cognitive lifting (searching, formatting, writing stories), final strategic decisions cannot be outsourced. The AI acts as a high-fidelity drafting assistant, while the Product Manager acts as the ultimate filter, validator, and editor before importing to the team's engineering backlog.

@@ -21,6 +21,17 @@ license: mit
 
 ---
 
+## Product Strategy & Design Artifacts
+
+* [docs/09_product_design_approach.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/09_product_design_approach.md)
+* [docs/10_prd.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/10_prd.md)
+* [docs/07_metrics_and_learnings.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/07_metrics_and_learnings.md)
+* [docs/08_release_notes.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/08_release_notes.md)
+
+This project documents both the product thinking and the agentic system design behind the build. The goal is to show how a fragmented product-discovery workflow was translated into a source-grounded, human-reviewable, multi-agent product intelligence system.
+
+---
+
 ## 📝 Executive Summary
 The **Competitor Intelligence Engine** is a production-grade multi-agent prototype designed to automate product discovery and competitive intelligence workflows. By coordinating specialized LLM agents via LangGraph and enforcing strict contract validation via Pydantic, the engine fetches live public competitor documentation, constructs source-grounded SWOT analyses, identifies opportunity gaps, and drafts complete, BDD-compliant Agile backlog items (Epics & User Stories).
 
