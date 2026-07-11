@@ -206,10 +206,20 @@ The space is automatically built from the `Dockerfile`. Ensure the following var
 
 ---
 
-## 💬 Recruiter Talking Points
+## 💬 Architectural & Safety Highlights
 * **Prompt Injection & Safety**: Built with strict boundary lines. Webpage extracts are passed as untrusted inputs, completely separated from core instructions.
 * **Production-Grade v2 Schemas**: Backlog generation enforces strict data contracts using Pydantic. If LLM outputs violate formatting constraints, the orchestrator triggers automated recovery.
 * **Access & Cost Controls**: Employs secure constant-time verification for Live Mode and early-stopping query fallbacks to prevent runaway API billing.
+
+---
+
+## Build, Tools & Replication Guide
+
+For detailed instructions on replication, hosting configuration, credentials setup, and estimated operational cost profiles, consult the following technical guides:
+* [docs/11_tools_costs_and_replication_guide.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/11_tools_costs_and_replication_guide.md)
+* [docs/09_product_design_approach.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/09_product_design_approach.md)
+* [docs/10_prd.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/10_prd.md)
+* [docs/05_system_architecture.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/05_system_architecture.md)
 
 ---
 

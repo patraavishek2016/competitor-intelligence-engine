@@ -2,6 +2,28 @@
 
 ---
 
+## v0.1.2 — Documentation Completion and Replication Guide
+
+**Release date:** 2026-07-11
+**Status:** ✅ Complete
+
+### Overview
+This release closes remaining public documentation gaps for Project 0 by populating blank documentation files and adding a tools, cost, and replication guide. No runtime logic or Python code has been modified.
+
+### Deliverables & Documentation Updates
+* **Populated Problem Statement**: Completed [docs/02_problem_statement.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/02_problem_statement.md) outlining Context, User Pain Points, Fragmented Research, Summarization vs Action, and the Human Review Boundary.
+* **Populated Product Requirements Summary**: Completed [docs/03_product_requirements.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/03_product_requirements.md) summarising core goals, inputs, outputs, Demo Mode vs Live Mode, Agent Workflow, and Pydantic validation rules.
+* **Populated System Architecture**: Completed [docs/05_system_architecture.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/05_system_architecture.md) with system flow diagram, agent nodes, validation gates, and deployment architecture details.
+* **Added Tools, Costs, and Replication Guide**: Created [docs/11_tools_costs_and_replication_guide.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/docs/11_tools_costs_and_replication_guide.md) documenting technical tools stack, environment configurations, pricing structures, and replication walkthroughs.
+* **Added Docker Ignore Exclusions**: Populated [.dockerignore](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/.dockerignore) with standard and safe exclude patterns.
+* **Updated README Navigation**: Appended the Build, Tools & Replication Guide references in the root [README.md](file:///C:/Users/avish/Documents/AI-Portfolio/competitor-intelligence-engine/README.md).
+
+### Constraints Check
+* **No runtime logic changed**: No python files or execution flows modified.
+* **No tests, secrets, dependencies, Dockerfile, or deployment settings changed**.
+
+---
+
 ## v0.1.1 — Product Design and PRD Closure
 
 **Release date:** 2026-07-11

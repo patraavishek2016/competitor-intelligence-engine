@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.git/
+.env
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+assets/screenshots/
+res_test.txt
+test_out.txt
+test_url_out.txt
